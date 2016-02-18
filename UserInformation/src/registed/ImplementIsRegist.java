@@ -12,8 +12,9 @@ import java.sql.SQLException;
  * Created by Administrator on 2016/2/18.
  */
 public class ImplementIsRegist implements UserIsRegisted{
-
+    boolean registed = false;
     @Override
+    //已经注册过返回真，否则你返回假
     public boolean isRegisted(User user) {
         Connection connection;
         PreparedStatement preparedStatement;
@@ -25,10 +26,10 @@ public class ImplementIsRegist implements UserIsRegisted{
             preparedStatement.setString(1,user.getuName());
             resultSet = preparedStatement.executeQuery();
             if(resultSet.next())
-                return true;
+                registed =  true;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return registed;
     }
 }
