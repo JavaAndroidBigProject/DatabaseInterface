@@ -12,15 +12,13 @@ import message.User;
  * Created by Administrator on 2016/2/18.
  */
 public class ImplementLogin implements UserLogin {
-    int score;
     @Override
     public int login(User user) {
         Connection connection ;
         PreparedStatement preparedStatement ;
         ResultSet resultSet ;
         String sqluName = "select username from user_score";
-        String sqluPassword = "select password from user_score where username=?";
-        String sqluScore = "select score from user_score where username=? and password=? ";
+        String sqluPassword = "select password,score from user_score where username=?";
 
         try{
             connection = DBUtils.getconnection();
@@ -30,42 +28,25 @@ public class ImplementLogin implements UserLogin {
             //判断username是否存在
             if(isName){
                 try{
-                    user = new User();
                     preparedStatement = connection.prepareStatement(sqluPassword);
                     preparedStatement.setString(1,user.getuName());
                     resultSet = preparedStatement.executeQuery();
+                    resultSet.next();
                     //判断密码是否正确
-                    if(resultSet.next())
+                    if(resultSet.getString("password").equals( user.getuPassword()))
                     {
-                        try{
-                            user = new User();
-                            preparedStatement = connection.prepareStatement(sqluScore);
-                            preparedStatement.setString(1,user.getuName());
-                            preparedStatement.setString(2,user.getuPassword());
-                            resultSet = preparedStatement.executeQuery();
-                            //两个都正确，返回分数
-                            if(resultSet.next()){
-                                score = resultSet.getInt("score");
-                            }
-                        }catch (SQLException e){
-                            e.printStackTrace();
-                        }
-
-
+                        return resultSet.getInt("score");
                     }else{
-                        score = -2;
+                        return  -2;
                     }
 
                 }catch (SQLException e){
                     e.printStackTrace();
                 }
             }
-            else{
-                score = -1;
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return score;
+        return -1;
     }
 }

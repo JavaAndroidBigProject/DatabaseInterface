@@ -13,7 +13,7 @@ public class DBUtils {
     public static String DRIVER;
 
     //连接配置文件(db-config)，配置文件里面包含连接数据库所必须的信息
-    private static ResourceBundle resourceBundle = ResourceBundle.getBundle("db-config");
+    private static ResourceBundle resourceBundle = ResourceBundle.getBundle("message/db-config");
 
     private DBUtils(){}
 

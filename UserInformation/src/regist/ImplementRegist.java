@@ -15,12 +15,13 @@ public class ImplementRegist implements UserRegist {
     public void regist(User user) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        String sql = "insert into user_score values(?,?)";
+        String sql = "insert into user_score values(?,?,?)";
         try{
             connection = DBUtils.getconnection();
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1,user.getuName());
             preparedStatement.setString(2,user.getuPassword());
+            preparedStatement.setInt(3,user.getuScore());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
