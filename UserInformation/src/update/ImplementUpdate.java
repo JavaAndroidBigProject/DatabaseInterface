@@ -21,6 +21,7 @@ public class ImplementUpdate implements UserUpdate {
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1,user.getuScore());
             preparedStatement.setString(2,user.getuName());
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             //throw new SQLException("更新失败!");

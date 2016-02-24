@@ -17,31 +17,22 @@ public class ImplementLogin implements UserLogin {
         Connection connection ;
         PreparedStatement preparedStatement ;
         ResultSet resultSet ;
-        String sqluName = "select username from user_score";
-        String sqluPassword = "select password,score from user_score where username=?";
+        String sqlString = "select username,password,score from user_score where username=?";
 
         try{
             connection = DBUtils.getconnection();
-            preparedStatement = connection.prepareStatement(sqluName);
+            preparedStatement = connection.prepareStatement(sqlString);
+            preparedStatement.setString(1,user.getuName());
             resultSet = preparedStatement.executeQuery();
-            boolean isName = resultSet.next();
-            //判断username是否存在
-            if(isName){
-                try{
-                    preparedStatement = connection.prepareStatement(sqluPassword);
-                    preparedStatement.setString(1,user.getuName());
-                    resultSet = preparedStatement.executeQuery();
-                    resultSet.next();
-                    //判断密码是否正确
-                    if(resultSet.getString("password").equals( user.getuPassword()))
-                    {
-                        return resultSet.getInt("score");
-                    }else{
-                        return  -2;
-                    }
 
-                }catch (SQLException e){
-                    e.printStackTrace();
+            //判断用户名是否存在
+            if(resultSet.next()){
+                //判断密码是否正确
+                if(resultSet.getString("password").equals( user.getuPassword()))
+                {
+                    return resultSet.getInt("score");
+                }else{
+                    return  -2;
                 }
             }
         } catch (SQLException e) {
